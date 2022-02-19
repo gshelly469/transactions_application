@@ -19,6 +19,10 @@ const transactionSchema = new mongoose.Schema({
         type:Number,
         required:true,
         min:0
+    },
+    acknowledgment:{
+        type:Boolean,
+        required:true
     }
 });
 

@@ -8,7 +8,8 @@ route.post('/addInTransactions' ,async (req, res) =>{
     const data_user = new Trans({
         personAccept_id : req.body.personAccept_id,
         personGive_id : req.body.personGive_id,
-        payment: req.body.payment
+        payment: req.body.payment,
+        acknowledgment: req.body.acknowledgment
     });
 
     data_user.save().then( data => {
