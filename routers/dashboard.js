@@ -6,8 +6,10 @@ const Users = require('../model/post_users');
 
 route.get('/getcalculation' ,async (req, res) =>{
     const numUser  = await Users.countDocuments({});
-    console.log(numUser);
-    const per = '620f5ab9c9620e42a4b4314d';
+    console.log('number of users' ,numUser);
+    const per = req.query.per;
+    console.log('All the parameters' ,req.query);
+
     const grandTotal = await outTrans.aggregate([
         {
             $group:{
@@ -24,7 +26,7 @@ route.get('/getcalculation' ,async (req, res) =>{
             }
         }
     ]);
-    console.log(grandTotal[0]['total']);
+    console.log('total number of users', grandTotal[0]['total']);
 
     const perTotalTrip = await outTrans.aggregate([
         {
@@ -47,6 +49,8 @@ route.get('/getcalculation' ,async (req, res) =>{
             }
         }
     ]);
+    console.log('id of person is  ', per);
+    console.log('Person total trip transactions', perTotalTrip[0]['total'])
     const netValue = perTotalTrip[0]['total']-grandTotal[0]['total']/numUser;
     console.log(netValue);
 

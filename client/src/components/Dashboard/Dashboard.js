@@ -12,10 +12,14 @@ class Dash extends Component{
     }
 
     componentDidMount(){
-        axios.get('http://127.0.0.1:5000/getDashData/getcalculation')
+        axios.get('http://127.0.0.1:5000/getDashData/getcalculation',{
+            params:{
+                per:localStorage.getItem('userid')
+            }
+        })
         .then( res => {
             this.setState({dashObject : res.data})
-            console.log(this.state.dashObject[0].total);
+            // console.log(this.state.dashObject[0].total);
         })
     }
 
@@ -25,9 +29,7 @@ class Dash extends Component{
                 <Topbar />
                 Dashboard
                 <ul>
-                    <li>
-                        {/* one{this.state.dashObject[0].total} */}
-                    </li>
+                    {this.state.dashObject.map( data => <li> {data.personGive_id} person has send you {data.payment} amount</li>)}
                     
                 </ul>
                 

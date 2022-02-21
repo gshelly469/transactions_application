@@ -36,10 +36,12 @@ export default function Login() {
     })
     .then( res => {
         localStorage.setItem('token', res.data.token);
-        localStorage.setItem('token', res.data.userid);
+        localStorage.setItem('userid', res.data.userid);
 
-        console.log(res.data.token);
-        console.log(res.data.userid);
+        console.log('value of token ' ,res.data.token);
+        console.log('id of person ' ,res.data.userid);
+        console.log('locally stored token ' ,localStorage.getItem('token'));
+
         navigate("/");
 
 
