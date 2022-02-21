@@ -7,7 +7,7 @@ const Users = require('../model/post_users');
 route.get('/getcalculation' ,async (req, res) =>{
     const numUser  = await Users.countDocuments({});
     console.log(numUser);
-    const per = '620f5a53c9620e42a4b43149';
+    const per = '620f5ab9c9620e42a4b4314d';
     const grandTotal = await outTrans.aggregate([
         {
             $group:{
@@ -138,6 +138,7 @@ route.get('/getcalculation' ,async (req, res) =>{
             }
         ]);
         console.log(acceptUsers);
+        return res.send(acceptUsers);
 
     }
     else if (total < 0){
@@ -214,7 +215,8 @@ route.get('/getcalculation' ,async (req, res) =>{
         }
         console.log(finalObjectArray);
 
-
+        res.header("Access-Control-Allow-Origin", "*");
+        return res.send(finalObjectArray);
         // for ( let  i = 0; i = allUsersOut.total.length; i++){
         //     allUsersOut.total[i] = allUsersOut.total[i] - grandTotal[0]['total']/numUser;
         // }
@@ -222,6 +224,9 @@ route.get('/getcalculation' ,async (req, res) =>{
     }
     else{
         console.log('Transactions complete');
+        return res.send({
+            payment:0
+        })
     }
     
 

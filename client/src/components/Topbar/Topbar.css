@@ -1,0 +1,42 @@
+.FullApp{
+    margin-top: 0;
+    padding: 0;
+    border: 0;
+}
+
+.Topbarclass{
+    display: flex;
+    background-color: rgb(99, 35, 248);
+    margin-top: 0;
+    /* padding: 0%; */
+}
+
+.DashboardClass{
+    flex: 2;
+}
+
+.TransactionsClass{
+    flex: 2;
+}
+
+.UploadClass{
+    flex: 2;
+}
+
+.Admin{
+    flex: 2;
+}
+
+.Logout{
+    flex: 2;
+}
+
+.navlinkClass{
+    color: bisque;
+    text-decoration: none;
+    
+}
+.activeClassName{
+    color: black;
+    text-decoration: none;
+}
