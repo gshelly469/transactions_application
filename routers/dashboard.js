@@ -141,7 +141,8 @@ route.get('/getcalculation' ,async (req, res) =>{
                 }
             }
         ]);
-        const userRole = { userRole:"Acceptor"};
+        const userRole = { userRole:"Acceptor",
+                            netAmout:0};
         console.log(finalObjectArray);
         const finalObjectAccepter = {
             ...userRole,
@@ -224,9 +225,17 @@ route.get('/getcalculation' ,async (req, res) =>{
         }
         console.log(finalObjectArray);
 
+        let personNetAmount = 0;
+        for (let i = 0; i < finalObjectArray.length; i++) {
+            if (finalObjectArray[i]._id === per){
+                personNetAmount = finalObjectArray[i].total;
+            }
+        }
+
         res.header("Access-Control-Allow-Origin", "*");
         
-        const userRole = { userRole:"Payer"};
+        const userRole = { userRole:"Payer",
+                            netAmout:personNetAmount};
         
         const finalObjectPayer = {
             ...userRole,
@@ -243,6 +252,7 @@ route.get('/getcalculation' ,async (req, res) =>{
         console.log('Transactions complete');
         const resObj = {
             userRole:"No Payment",
+            netAmout:0,
             finalObjectArray:0
         };
         return res.send(resObj)
@@ -322,7 +332,7 @@ route.post('/acknowledgeMoney', async (req, res)=> {
     const aMoney = new inTrans({
         personAccept_id : req.body.personAccept_id,
         personGive_id : req.body.personGive_id,
-        acknowledgment: false
+        acknowledgment: true
     });
 
     const acknowledgeTrans = inTrans.findOneAndUpdate({
