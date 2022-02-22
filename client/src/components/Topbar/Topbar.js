@@ -7,6 +7,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 class Topbar extends Component{
+    deleteUser(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('userid');
+    };
+
     render(){
         return(
                 <div className='TopbarClass'>
@@ -27,7 +32,7 @@ class Topbar extends Component{
                             <Nav.Link href="/Transaction" > Transaction </Nav.Link>
                             <Nav.Link href="/UploadTrans" > Upload Transaction </Nav.Link>
                             <Nav.Link href="/Admin" > Admin </Nav.Link>
-                            <Nav.Link href="/" > Logout </Nav.Link>
+                            <Nav.Link href="/Login" onClick={this.deleteUser}> Logout </Nav.Link>
                         </Nav>
                     </Navbar>
                 

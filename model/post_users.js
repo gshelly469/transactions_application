@@ -28,7 +28,7 @@ const user_schema = new mongoose.Schema({
         max:100
     },
     gender:{
-        type:Boolean,
+        type:String,
         required:true
     }
 });
