@@ -1,20 +1,20 @@
 import axios from 'axios';
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Dashboard.css'
 import Topbar from '../Topbar/Topbar';
 import {Button} from 'reactstrap'
+import {  } from 'react-router-dom';
 
-class Dash extends Component{
-    constructor(){
-        super();
-        this.state = {
-            dashObject : [],
-            netAmout:0,
-            Role: ""
-        }
-    }
+export default function Component(){
+    const [dashObject, setdashObject] = useState([]);
+    const [netAmount, setnetAmount] = useState(0);
+    const [Role, setRole] = useState("");
+    const [refresh, setrefresh] = useState(0);
+    const [paym, setpaym] = useState("");
 
-    componentDidMount(){
+
+
+    useEffect(() =>{
         axios.get('http://127.0.0.1:5000/getDashData/getcalculation',{
             params:{
                 per:localStorage.getItem('userid')
@@ -22,16 +22,42 @@ class Dash extends Component{
         })
         .then( res => {
             console.log('response data', res.data);
-            this.setState({dashObject : res.data.finalObjectArray});
-            this.setState({Role : res.data.userRole});
-            this.setState({netAmout : res.data.netAmout});
+            setRole(res.data.userRole);
+            setnetAmount(res.data.netAmout);
+            // console.log('response netamount', res.data.netAmout);
+            setdashObject(res.data.finalObjectArray);
 
 
             // console.log(this.state.dashObject[0].total);
         })
-    }
+    },[refresh]);
+    // constructor(){
+    //     super();
+    //     this.state = {
+    //         dashObject : [],
+    //         netAmount:0,
+    //         Role: ""
+    //     }
+    // }
 
-    handleAck (senderid, payment) {
+    // componentDidMount(){
+    //     axios.get('http://127.0.0.1:5000/getDashData/getcalculation',{
+    //         params:{
+    //             per:localStorage.getItem('userid')
+    //         }
+    //     })
+    //     .then( res => {
+    //         console.log('response data', res.data);
+    //         this.setState({dashObject : res.data.finalObjectArray});
+    //         this.setState({Role : res.data.userRole});
+    //         this.setState({netAmount : res.data.netAmount});
+
+
+    //         // console.log(this.state.dashObject[0].total);
+    //     })
+    // }
+
+    function handleAck (senderid, payment) {
         const postAck = JSON.stringify({
             "personGive_id":senderid,
             "personAccept_id":localStorage.getItem('userid'),
@@ -49,20 +75,22 @@ class Dash extends Component{
         })
     };
 
-    handlePay (giveid, payment) {
+    function handlePay (giveid, payment) {
+        // const navigate = useNavigate();
         let postPay = {}
         const postid = {
             "personGive_id":localStorage.getItem('userid'),
             "personAccept_id":giveid
         };
 
-        if (payment>-this.state.netAmout){
-            const pay = {"payment":-this.state.netAmout};
+        if (payment>-netAmount){
+            const pay = {"payment":-netAmount};
             postPay ={
                 ...pay,
                 ...postid
             }
-            this.setState({netAmout:0});
+            setnetAmount(0);
+            // this.setState({netAmount:0});
         }
         else{
             const pay = {"payment":payment};
@@ -70,72 +98,89 @@ class Dash extends Component{
                 ...pay,
                 ...postid
             }
-            this.setState({netAmout:this.state.netAmout+payment});
+            setnetAmount(netAmount+payment);
+            // this.setState({netAmount:this.state.netAmount+payment});
         }
-        console.log('user pay', payment);
         console.log('From pay', postPay);
-        // axios.post('http://127.0.0.1:5000/getDashData/gaveMoney', JSON.stringify(postPay),
-        // {
-        //     "headers": {
-        //     "content-type": "application/json"
-        // }})
-        // .then(res => {
-        //     console.log('acknowledged', res.data);  
-        // })
+        const strpay = JSON.stringify(postPay);
+        console.log('user pay', strpay);
+        setrefresh(refresh+1);
+        
+        axios.post('http://127.0.0.1:5000/getDashData/gaveMoney', strpay,
+        {
+            "headers": {
+            "content-type": "application/json"
+        }})
+        .then(res => {
+            console.log('acknowledged', res.data);
+              
+        });
+
+        // return <Navigate to="/"></Navigate>
     };
 
-    render(){
-        console.log('dashboard res object',this.state.dashObject);
-        console.log('dashboard res role', this.state.Role);
+    
+    console.log('dashboard object',dashObject);
+    console.log('dashboard role', Role);
+    console.log('dashboard Netamount', netAmount);
 
-        if (this.state.Role === "Acceptor"){
-            return(
-                <div className='Dash'>
-                    <Topbar />
-                    <h1>Dashboard</h1>
-                    <ul>
-                        {this.state.dashObject.map( data => <li className='listClass'> {data.personGive_id} person has sent you {data.payment} amount <Button className=' btn-light' onClick={() => this.handleAck(data.personGive_id, data.payment)}>Acknowledge</Button></li>)}
-                        
-                    </ul>
-                    
-                </div>
-            )
-        }
-        else if (this.state.Role === "Payer"){
-            return(
-                <div className='Dash'>
-                    <Topbar />
-                    <h1>Dashboard</h1>
-                    You have to pay total of {this.state.netAmout}
-                    <ul>
-                        {this.state.dashObject.map( data => (data.total>0) ? <li className='listClass'> You can pay {data.total} amount to {data._id} person <Button className='btn-light' onClick={() => this.handlePay(data._id, data.total)}>Pay</Button></li>: null)}
-                        
-                    </ul>
-                    
-                </div>
-            )
-        }
-        else if ( this.state.Role === "No Payment"){
-            return(
-                <div className='Dash'>
-                    <Topbar />
-                    <h1>Dashboard</h1>
-                    <ul>
-                        <li> Your net transactions are nill</li>
-                        
-                    </ul>
-                    
-                </div>
-            )
-        };
-        return (
+
+    if (Role === "Acceptor"){
+        return(
             <div className='Dash'>
-                    <Topbar />
-                    Loading the dashboard. Please wait
+                <Topbar />
+                <h1>Dashboard</h1>
+                <ul>
+                    {dashObject.map( data => <li className='listClass'> {data.personGive_id} person has sent you {data.payment} amount <Button className=' btn-light' onClick={() => handleAck(data.personGive_id, data.payment)}>Acknowledge</Button></li>)}
+                    
+                </ul>
+                
             </div>
         )
-        
+    }
+    else if (Role === "Payer"){
+        return( (netAmount !== 0) ?
+            <div className='Dash'>
+                <Topbar />
+                <h1>Dashboard</h1>
+                You have to pay total of {netAmount}
+                
+                <ul>
+                    {dashObject.map( data => (data.total>0) ? <li className='listClass'> You can pay {data.total} amount to {data._id} person <Button className='btn-light' onClick={() => handlePay(data._id, data.total)}>Pay</Button></li>: null)}
+                    
+                </ul> 
+                
+            </div> :
+            <div className='Dash'>
+                <Topbar />
+                <h1>Dashboard</h1>
+                <ul>
+                    <li> Your net transactions are nill....</li>
+                    
+                </ul>
+                
+            </div>
+        )
+    }
+    else if (Role === "No Payment"){
+        return(
+            <div className='Dash'>
+                <Topbar />
+                <h1>Dashboard</h1>
+                <ul>
+                    <li> Your net transactions are nill</li>
+                    
+                </ul>
+                
+            </div>
+        )
     };
-}
+    return (
+        <div className='Dash'>
+                <Topbar />
+                Loading the dashboard. Please wait
+        </div>
+    )
+    
+};
 
-export default Dash;

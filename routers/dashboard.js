@@ -166,11 +166,6 @@ route.get('/getcalculation' ,async (req, res) =>{
 
         const allUsersInGive = await inTrans.aggregate([
             {
-                $match:{
-                    acknowledgment:true
-                }
-            },
-            {
                 $group:{
                     _id:'$personGive_id',
                     total:{
@@ -182,11 +177,6 @@ route.get('/getcalculation' ,async (req, res) =>{
         console.log(allUsersInGive);
 
         const allUsersInAccept = await inTrans.aggregate([
-            {
-                $match:{
-                    acknowledgment:true
-                }
-            },
             {
                 $group:{
                     _id:'$personAccept_id',
@@ -281,6 +271,9 @@ route.post('/gaveMoney', async (req, res)=> {
             },
             {
                 personGive_id:gMoney.personGive_id
+            },
+            {
+                acknowledgment:gMoney.acknowledgment
             }
         ]
     },
