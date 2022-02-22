@@ -126,7 +126,7 @@ route.get('/getcalculation' ,async (req, res) =>{
     if (total > 0){
         console.log('total is positive');
 
-        const acceptUsers = await inTrans.aggregate([
+        const finalObjectArray = await inTrans.aggregate([
             {
                 $match:{
                     personAccept_id:per,
@@ -141,8 +141,13 @@ route.get('/getcalculation' ,async (req, res) =>{
                 }
             }
         ]);
-        console.log(acceptUsers);
-        return res.send(acceptUsers);
+        const userRole = { userRole:"Acceptor"};
+        console.log(finalObjectArray);
+        const finalObjectAccepter = {
+            ...userRole,
+            finalObjectArray
+        };
+        return res.send(finalObjectAccepter);
 
     }
     else if (total < 0){
@@ -220,7 +225,15 @@ route.get('/getcalculation' ,async (req, res) =>{
         console.log(finalObjectArray);
 
         res.header("Access-Control-Allow-Origin", "*");
-        return res.send(finalObjectArray);
+        
+        const userRole = { userRole:"Payer"};
+        
+        const finalObjectPayer = {
+            ...userRole,
+            finalObjectArray
+        }
+        console.log("final object of payer", finalObjectPayer);
+        return res.send(finalObjectPayer);
         // for ( let  i = 0; i = allUsersOut.total.length; i++){
         //     allUsersOut.total[i] = allUsersOut.total[i] - grandTotal[0]['total']/numUser;
         // }
@@ -228,9 +241,11 @@ route.get('/getcalculation' ,async (req, res) =>{
     }
     else{
         console.log('Transactions complete');
-        return res.send({
-            payment:0
-        })
+        const resObj = {
+            userRole:"No Payment",
+            finalObjectArray:0
+        };
+        return res.send(resObj)
     }
     
 
