@@ -5,6 +5,7 @@ const outsideTransactions = require('./routers/OutTransactions');
 const inTransactions = require('./routers/InTransactions');
 const dash = require('./routers/dashboard');
 const loginapi = require('./routers/loginRoute');
+const getOutTrans = require('./routers/getOutTrans')
 const cors = require('cors');
 
 
@@ -22,6 +23,7 @@ app.use('/post_user', create_user);
 app.use('/postTransactions', outsideTransactions);
 app.use('/postInTransactions', inTransactions);
 app.use('/getDashData', dash);
+app.use('/getOutTrans', getOutTrans);
 app.use('/Login', loginapi);
 
 
