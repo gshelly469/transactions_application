@@ -26,6 +26,18 @@ route.get('/getcalculation' ,async (req, res) =>{
             }
         }
     ]);
+
+    if (grandTotal.length===0){
+        console.log('No Transactions');
+        const resObj = {
+            userRole:"No Payment",
+            netAmout:0,
+            finalObjectArray:0
+        };
+        return res.send(resObj)
+    }
+
+
     console.log('total number of users', grandTotal[0]['total']);
 
     const perTotalTrip = await outTrans.aggregate([

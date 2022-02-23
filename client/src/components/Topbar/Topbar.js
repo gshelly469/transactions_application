@@ -1,45 +1,51 @@
-import React, {Component} from 'react';
+import React from 'react';
 import './Topbar.css'
 
 // import {NavLink} from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Navigate } from 'react-router-dom';
 
 
-class Topbar extends Component{
-    deleteUser(){
+export default function Topbar() {
+    function deleteUser(){
         localStorage.removeItem('token');
         localStorage.removeItem('userid');
         localStorage.removeItem('email');
 
     };
 
-    render(){
+    
+    if (!localStorage.getItem('userid')){
         return(
-                <div className='TopbarClass'>
-                    <Navbar bg='dark' variant='dark' sticky='top'>
-                        {/* <NavLink className="navlinkClass" activeClassName="active" to='/' exact>
-                            Friends Payment
-                        </NavLink>
-
-                        <NavLink className="navlinkClass" activeClassName="active" to='/Transaction' exact>
-                            Transaction
-                        </NavLink>
-
-                        <NavLink className="navlinkClass" activeClassName="active" to='/UploadTrans' exact>
-                            UploadTrans 
-                        </NavLink> */}
-                        <Nav>
-                            <Nav.Link href="/" > Dashboard </Nav.Link>
-                            <Nav.Link href="/Transaction" > Transaction </Nav.Link>
-                            <Nav.Link href="/UploadTrans" > Upload Transaction </Nav.Link>
-                            <Nav.Link href="/Admin" > Admin </Nav.Link>
-                            <Nav.Link href="/Login" onClick={this.deleteUser}> Logout </Nav.Link>
-                        </Nav>
-                    </Navbar>
-                
-                </div>
+            <Navigate to ="/Login"/>
         )
+    };
+    return(
+            <div className='TopbarClass'>
+                <Navbar bg='dark' variant='dark' sticky='top'>
+                    {/* <NavLink className="navlinkClass" activeClassName="active" to='/' exact>
+                        Friends Payment
+                    </NavLink>
+
+                    <NavLink className="navlinkClass" activeClassName="active" to='/Transaction' exact>
+                        Transaction
+                    </NavLink>
+
+                    <NavLink className="navlinkClass" activeClassName="active" to='/UploadTrans' exact>
+                        UploadTrans 
+                    </NavLink> */}
+                    <Nav>
+                        <Nav.Link href="/" > Dashboard </Nav.Link>
+                        <Nav.Link href="/Transaction" > Transaction </Nav.Link>
+                        <Nav.Link href="/UploadTrans" > Upload Transaction </Nav.Link>
+                        <Nav.Link href="/Admin" > Admin </Nav.Link>
+                        <Nav.Link href="/Login" onClick={deleteUser}> Logout </Nav.Link>
+                    </Nav>
+                </Navbar>
+            
+            </div>
+    )
 
                 // <nav className='NavbarClass'>
                 //     <NavLink className="navlinkClass" to='/' exact>
@@ -108,7 +114,5 @@ class Topbar extends Component{
                     //     Friends Payment
                     // </NavLink>
             
-    }
-}
+    };
 
-export default Topbar;
