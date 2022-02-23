@@ -290,7 +290,7 @@ route.post('/gaveMoney', async (req, res)=> {
             console.log('returned occuerrs');
             console.log(doc);
 
-            if (doc == null){
+            if (doc.length === 0){
                 gMoney.save().then( data => {
                     res.send(data);
                 })

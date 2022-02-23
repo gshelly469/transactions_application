@@ -8,23 +8,49 @@ route.post('/addTheData' ,async (req, res) =>{
     const salt_pass = await enc.genSalt(10);
     const hashPass = await enc.hash(req.body.password, salt_pass);
 
-
-    console.log(req.body);
-
     const data_user = new Users({
         name_str : req.body.name,
         mobile : req.body.mobile,
         password : hashPass,
         age: req.body.age,
-        gender: req.body.gender
+        gender: req.body.gender,
+        email: req.body.email
     });
 
-    data_user.save().then( data => {
-        res.send(data);
+    console.log(req.body);
+
+    const userExists = Users.find({email:req.body.email},
+    (err, doc)=>{
+        if (err){
+            console.log('errorr occuerrs');
+            console.log(err);
+        }
+        else{
+            console.log('returned occuerrs');
+            console.log(doc.length);
+
+            if (doc.length === 0){
+                data_user.save().then( data => {
+                    res.send(data);
+                })
+                .catch( err => {
+                    console.log(err);
+                })
+            }
+            else{
+                res.send("Doc already exists");
+            }
+        }
     })
-    .catch(err =>{
-        res.json({message:err});
-    }) 
+
+    
+
+    // data_user.save().then( data => {
+    //     res.send(data);
+    // })
+    // .catch(err =>{
+    //     res.json({message:err});
+    // }) 
 
 });
 

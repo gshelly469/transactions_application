@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 
 route.post('/login', async (req, res) =>{
 
-    console.log(req.body.id);
-    const user = await Users.findOne({'_id':req.body.id});
+    console.log(req.body.email);
+    const user = await Users.findOne({'email':req.body.email});
     // console.log(user);
 
     if (!user) return res.status(400).send('Username not found');
@@ -19,12 +19,14 @@ route.post('/login', async (req, res) =>{
     if (!pass) return res.send('password incorrect');
 
     const signed_token = jwt.sign({'_id':user._id,
-                                    'name':user.name_str },process.env.Secret_key_jwt )
+                                    'name':user.name_str,
+                                    'email':user.email },process.env.Secret_key_jwt )
     
     // return res.send(signed_token);
     return res.header('auth-token', signed_token).send({
         token:signed_token,
-        userid:req.body.id
+        userid:user._id,
+        email:req.body.email
     });
    
 });
