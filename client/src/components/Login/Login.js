@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import "./Login.css";
 import axios from "axios";
 import { useNavigate  } from 'react-router-dom';
+import {Button, Form, FormGroup, Label, Input} from 'reactstrap';
 
 export default function Login() {
 
@@ -12,14 +11,14 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return email.length > 0 && password.length > 4;
   }
 
   function handleSubmit(event) {
     event.preventDefault();
 
     const userObject = JSON.stringify({
-        "id":email,
+        "email":email,
         "password":password
     })
 
@@ -40,6 +39,7 @@ export default function Login() {
 
         console.log('value of token ' ,res.data.token);
         console.log('id of person ' ,res.data.userid);
+        console.log('email of person ' ,res.data.email);
         console.log('locally stored token ' ,localStorage.getItem('token'));
 
         navigate("/");
@@ -50,26 +50,17 @@ export default function Login() {
 
   return (
     <div className="Login">
-      <Form onSubmit={handleSubmit}>
+      <Form className='loginForm'onSubmit={handleSubmit}>
           <h1>Login Page</h1>
-        <Form.Group size="lg" controlId="email">
-          <Form.Label>User ID</Form.Label>
-          <Form.Control
-            autoFocus
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group size="lg" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <FormGroup size="lg" controlId="email">
+          <Label>User ID</Label>
+          <Input autoFocus type="text" placeholder="emailid should be unique" onChange={(e) => setEmail(e.target.value)} />
+        </FormGroup>
+        <FormGroup size="lg" controlId="password">
+          <Label>Password</Label>
+          <Input type="password" placeholder="Atleast 5 characters long" onChange={(e) => setPassword(e.target.value)} />
+        </FormGroup>
+        <Button className='btn-lg btn-dark' disabled={!validateForm()}>
           Login
         </Button>
       </Form>

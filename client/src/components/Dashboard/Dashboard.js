@@ -10,7 +10,7 @@ export default function Component(){
     const [netAmount, setnetAmount] = useState(0);
     const [Role, setRole] = useState("");
     const [refresh, setrefresh] = useState(0);
-    const [paym, setpaym] = useState("");
+    const [email, setemail  ] = useState("");
 
 
 

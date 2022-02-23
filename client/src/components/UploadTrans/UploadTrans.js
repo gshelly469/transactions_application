@@ -6,7 +6,6 @@ import axios from 'axios';
 
 
 export default function UploadTrans(){
-    const [name_id, setname_id] = useState("");
     const [trip_name, setTrip] = useState("");
     const [activity, setactivity] = useState("");
     const [payment, setpayment] = useState("");
@@ -17,10 +16,10 @@ export default function UploadTrans(){
         event.preventDefault();
     
         const userObject = JSON.stringify({
-            "name_id":name_id,
             "trip_name":trip_name,
             "activity":activity,
-            "payment":payment
+            "payment":payment,
+            "name_id":localStorage.getItem('userid')
         })
     
         console.log(userObject)
@@ -44,10 +43,6 @@ export default function UploadTrans(){
                 <Topbar />
                 <Form className='transForm' onSubmit={handleSubmit}>
                     <h1>Create User</h1>
-                    <FormGroup>
-                        <Label>User ID</Label>
-                        <Input type='text' placeholder='User ID' onChange={(e)=>setname_id(e.target.value)}></Input>
-                    </FormGroup>
                     <FormGroup>
                         <Label>Trip name</Label>
                         <Input type='text' placeholder='' onChange={(e)=>setTrip(e.target.value)}></Input>

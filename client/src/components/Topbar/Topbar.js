@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './Topbar.css'
 
-import {NavLink} from 'react-router-dom';
+// import {NavLink} from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -10,6 +10,8 @@ class Topbar extends Component{
     deleteUser(){
         localStorage.removeItem('token');
         localStorage.removeItem('userid');
+        localStorage.removeItem('email');
+
     };
 
     render(){

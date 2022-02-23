@@ -11,6 +11,8 @@ export default function Admin(){
     const [age, setage] = useState("");
     const [gender, setgender] = useState("");
     const [password, setpassword] = useState("");
+    const [email, setEmail] = useState("");
+
 
 
 
@@ -19,6 +21,7 @@ export default function Admin(){
     
         const userObject = JSON.stringify({
             "name":username,
+            "email":email,
             "password":password,
             "mobile":mobileno,
             "age":age,
@@ -49,6 +52,10 @@ export default function Admin(){
                     <FormGroup>
                         <Label>User name</Label>
                         <Input type='text' placeholder='Name' onChange={(e)=>setUsername(e.target.value)}></Input>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>Email ID</Label>
+                        <Input type='email' placeholder='email id should be unique' onChange={(e)=>setEmail(e.target.value)}></Input>
                     </FormGroup>
                     <FormGroup>
                         <Label>Password</Label>
