@@ -276,7 +276,7 @@ route.post('/gaveMoney', async (req, res)=> {
     });
     
 
-    const findPreviousTrans = inTrans.findOneAndUpdate({
+    const findPreviousTrans = await inTrans.findOneAndUpdate({
         $and:[
             {
                 personAccept_id:gMoney.personAccept_id
@@ -340,7 +340,7 @@ route.post('/acknowledgeMoney', async (req, res)=> {
         acknowledgment: true
     });
 
-    const acknowledgeTrans = inTrans.findOneAndUpdate({
+    const acknowledgeTrans = await inTrans.findOneAndUpdate({
         $and:[
             {
                 personAccept_id:aMoney.personAccept_id

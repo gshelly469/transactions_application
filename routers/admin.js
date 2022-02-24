@@ -1,14 +1,14 @@
 const route = require('express').Router();
-const Users = require('../model/post_users');
+const User = require('../model/post_users');
 const enc = require('bcryptjs');
 
 route.post('/addTheData' ,async (req, res) =>{
 
-    // Creating of password with salt
+    // // Creating of password with salt
     const salt_pass = await enc.genSalt(10);
     const hashPass = await enc.hash(req.body.password, salt_pass);
 
-    const data_user = new Users({
+    const data_user = new User({
         name_str : req.body.name,
         mobile : req.body.mobile,
         password : hashPass,
@@ -19,7 +19,7 @@ route.post('/addTheData' ,async (req, res) =>{
 
     console.log(req.body);
 
-    const userExists = Users.find({email:req.body.email},
+    const userExists = await User.aggregate([{$match:{email:req.body.email}}],
     (err, doc)=>{
         if (err){
             console.log('errorr occuerrs');
