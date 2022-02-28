@@ -62,6 +62,7 @@ route.get('/getcalculation' ,async (req, res) =>{
         }
     ]);
     console.log('id of person is  ', per);
+    console.log(perTotalTrip, per);
     console.log('Person total trip transactions', perTotalTrip[0]['total'])
     const netValue = perTotalTrip[0]['total']-grandTotal[0]['total']/numUser;
     console.log(netValue);
@@ -93,7 +94,8 @@ route.get('/getcalculation' ,async (req, res) =>{
     const totalPaymentAccept = await inTrans.aggregate([
         {
             $match:{
-                personAccept_id:per
+                personAccept_id:per,
+                acknowledgment:true
             }
         },
         {
@@ -292,45 +294,22 @@ route.post('/gaveMoney', async (req, res)=> {
     {
         payment:gMoney.payment
     },
-    {new: true},
-    (err, doc) => {
-        if (err){
-            console.log('errorr occuerrs');
+    {new: true});
+
+    console.log(findPreviousTrans);
+    if (findPreviousTrans === null){
+        gMoney.save().then( data => {
+            return res.send(data);
+        })
+        .catch( err => {
             console.log(err);
-        }
-        else{
-            console.log('returned occuerrs');
-            console.log(doc);
+            return res.status(400).send(err);
+        })
+    }
+    else{
+        return res.send(findPreviousTrans);
+    }
 
-            if (doc.length === 0){
-                gMoney.save().then( data => {
-                    res.send(data);
-                })
-                .catch( err => {
-                    console.log(err);
-                })
-            }
-            else{
-                res.send(doc);
-            }
-        }
-        
-    });
-    // console.log(findPreviousTrans);
-
-    // const gMoney = new inTrans({
-    //     personAccept_id : req.body.personAccept_id,
-    //     personGive_id : req.body.personGive_id,
-    //     payment: req.body.payment,
-    //     acknowledgment: false
-    // });
-
-    // gMoney.save().then( data => {
-
-    // })
-    // .catch( err => {
-    //     console.log(err);
-    // });
 });
 
 route.post('/acknowledgeMoney', async (req, res)=> {
@@ -347,25 +326,25 @@ route.post('/acknowledgeMoney', async (req, res)=> {
             },
             {
                 personGive_id:aMoney.personGive_id
+            },
+            {
+                acknowledgment:false
             }
         ]
     },
     {
         acknowledgment:aMoney.acknowledgment
     },
-    {new: true},
-    (err, doc) => {
-        if (err){
-            console.log('errorr occuerrs');
-            console.log(err);
-            return res.send(doc);
-        }
-        else{
-            console.log('returned occuerrs');
-            return res.send(doc);
-        }
-    }
+    {new: true}
     )
+
+    console.log(acknowledgeTrans);
+    if (acknowledgeTrans === null){
+        return res.status(400).send({message:'An error occured'})
+    }
+    else{
+        return res.send(acknowledgeTrans)
+    }
 });
 
 module.exports = route;

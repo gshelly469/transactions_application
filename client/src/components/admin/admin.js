@@ -37,7 +37,13 @@ export default function Admin(){
         }
         })
         .then( res => {
-            console.log('value of res ' ,res.data);
+            console.log('value of res ' ,res);
+        })
+        .catch(err => {
+            // console.log('error in api', err.response);
+            // console.log('error in api', err);
+
+            alert(err.response.data);
         })
       };
 

@@ -21,9 +21,10 @@ route.post('/addTheData' ,async (req, res) =>{
 
     const userExists = await User.aggregate([{$match:{email:req.body.email}}],
     (err, doc)=>{
-        if (err){
+        if (err){ 
             console.log('errorr occuerrs');
             console.log(err);
+            return res.status(400).send(err);
         }
         else{
             console.log('returned occuerrs');
@@ -31,14 +32,15 @@ route.post('/addTheData' ,async (req, res) =>{
 
             if (doc.length === 0){
                 data_user.save().then( data => {
-                    res.send(data);
+                    return res.status(200).send(data);
                 })
                 .catch( err => {
                     console.log(err);
+                    return res.status(400).send(err.message);
                 })
             }
             else{
-                res.send("Doc already exists");
+                return res.status(400).send("Email Id already exists");
             }
         }
     })

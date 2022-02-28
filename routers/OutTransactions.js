@@ -13,10 +13,10 @@ route.post('/addTransactions' ,async (req, res) =>{
     });
 
     data_user.save().then( data => {
-        res.send(data);
+        return res.send(data);
     })
     .catch(err =>{
-        res.json({message:err});
+        return res.status(400).send(err.message);
     }) 
 
 });

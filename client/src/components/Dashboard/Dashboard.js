@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import './Dashboard.css'
 import Topbar from '../Topbar/Topbar';
 import {Button} from 'reactstrap'
+import { Spinner } from 'react-bootstrap';
 
 export default function Component(){
     const [dashObject, setdashObject] = useState([]);
@@ -30,31 +31,7 @@ export default function Component(){
             // console.log(this.state.dashObject[0].total);
         })
     },[refresh]);
-    // constructor(){
-    //     super();
-    //     this.state = {
-    //         dashObject : [],
-    //         netAmount:0,
-    //         Role: ""
-    //     }
-    // }
 
-    // componentDidMount(){
-    //     axios.get('http://127.0.0.1:5000/getDashData/getcalculation',{
-    //         params:{
-    //             per:localStorage.getItem('userid')
-    //         }
-    //     })
-    //     .then( res => {
-    //         console.log('response data', res.data);
-    //         this.setState({dashObject : res.data.finalObjectArray});
-    //         this.setState({Role : res.data.userRole});
-    //         this.setState({netAmount : res.data.netAmount});
-
-
-    //         // console.log(this.state.dashObject[0].total);
-    //     })
-    // }
 
     function handleAck (senderid, payment) {
         const postAck = JSON.stringify({
@@ -130,7 +107,7 @@ export default function Component(){
                 <Topbar />
                 <h1>Dashboard</h1>
                 <ul>
-                    {dashObject.map( data => <li className='listClass'> {data.personGive_id} person has sent you {data.payment} amount <Button className=' btn-light' onClick={() => handleAck(data.personGive_id, data.payment)}>Acknowledge</Button></li>)}
+                    {dashObject.map( data => <li className='listClass' key={data.personGive_id}> {data.personGive_id} person has sent you {data.payment} amount <Button className=' btn-light' onClick={() => handleAck(data.personGive_id, data.payment)}>Acknowledge</Button></li>)}
                     
                 </ul>
                 
@@ -145,7 +122,7 @@ export default function Component(){
                 You have to pay total of {netAmount}
                 
                 <ul>
-                    {dashObject.map( data => (data.total>0) ? <li className='listClass'> You can pay {data.total} amount to {data._id} person <Button className='btn-light' onClick={() => handlePay(data._id, data.total)}>Pay</Button></li>: null)}
+                    {dashObject.map( data => (data.total>0) ? <li className='listClass' key={data._id}> You can pay {data.total} amount to {data._id} person <Button className='btn-light' onClick={() => handlePay(data._id, data.total)}>Pay</Button></li>: null)}
                     
                 </ul> 
                 

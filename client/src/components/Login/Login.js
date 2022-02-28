@@ -46,17 +46,21 @@ export default function Login() {
 
 
     })
+    .catch( err =>{
+      console.log('error in the login', err.response);
+      alert(err.response.data);
+    })
   }
 
   return (
     <div className="Login">
       <Form className='loginForm'onSubmit={handleSubmit}>
           <h1>Login Page</h1>
-        <FormGroup size="lg" controlId="email">
+        <FormGroup>
           <Label>User ID</Label>
           <Input autoFocus type="text" placeholder="emailid should be unique" onChange={(e) => setEmail(e.target.value)} />
         </FormGroup>
-        <FormGroup size="lg" controlId="password">
+        <FormGroup>
           <Label>Password</Label>
           <Input type="password" placeholder="Atleast 5 characters long" onChange={(e) => setPassword(e.target.value)} />
         </FormGroup>

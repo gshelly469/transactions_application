@@ -9,14 +9,14 @@ route.post('/login', async (req, res) =>{
     const user = await Users.findOne({'email':req.body.email});
     // console.log(user);
 
-    if (!user) return res.status(400).send('Username not found');
+    if (!user) return res.status(400).send('Username or password not correct');
     console.log(req.body.password);
     console.log(user.password);
 
     
     const pass = await enc.compare(req.body.password, user.password);
-    console.log(pass);
-    if (!pass) return res.send('password incorrect');
+    console.log('encryption', pass);
+    if (!pass) return res.status(400).send('Username or password not correct');
 
     const signed_token = jwt.sign({'_id':user._id,
                                     'name':user.name_str,

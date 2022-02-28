@@ -33,6 +33,10 @@ export default function UploadTrans(){
         .then( res => {
             console.log('value of res ' ,res.data);
         })
+        .catch( err =>{
+            console.log('value of the error in the upload transaction', err.response);
+            alert(err.response.data);
+        })
       };
 
 
